@@ -32,7 +32,7 @@ public class LottoService {
 
     @Transactional
     @ExecutionTime
-    public void createLotto(Long count) {
+    public void createLotto(Long count, Long round) {
 
         ArrayList<Lotto> list1 = new ArrayList<>();
 
@@ -71,6 +71,7 @@ public class LottoService {
                     .fourthNum(Long.parseLong(Integer.toString(list.get(3))))
                     .fifthNum(Long.parseLong(Integer.toString(list.get(4))))
                     .sixthNum(Long.parseLong(Integer.toString(list.get(5))))
+                    .round(round)
                     .uniqueCode(id)
                     .store(allStore.get((int) (Math.random()*allStore.size())))
                     .build();
@@ -109,7 +110,7 @@ public class LottoService {
         roundNumber.add(round.getNum5());
         roundNumber.add(round.getNum6());
 
-        List<Lotto> allLotto = lottoRepository.findAll();
+        List<Lotto> allLotto = lottoRepository.findAllByRound(roundId);
 
         for(int i = 0 ; i < allLotto.size() ; i++) {
 
