@@ -16,10 +16,10 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.*;
 
-@Service
 @Transactional
 @RequiredArgsConstructor
 @Getter
+@Service
 public class LottoService {
 
     private final LottoRepository lottoRepository;
@@ -42,6 +42,7 @@ public class LottoService {
             int min = 1;
             int max = 45;
 
+            // 더미 데이터의 6개의 숫자를 담을 list
             List<Integer> list = new ArrayList<>();
 
             int ranNum = 0;
@@ -71,6 +72,7 @@ public class LottoService {
                     .fourthNum(Long.parseLong(Integer.toString(list.get(3))))
                     .fifthNum(Long.parseLong(Integer.toString(list.get(4))))
                     .sixthNum(Long.parseLong(Integer.toString(list.get(5))))
+//                    .round(round)
                     .uniqueCode(id)
                     .store(allStore.get((int) (Math.random()*allStore.size())))
                     .build();
@@ -109,6 +111,7 @@ public class LottoService {
         roundNumber.add(round.getNum5());
         roundNumber.add(round.getNum6());
 
+//        List<Lotto> allLotto = lottoRepository.findAllByRound(roundId);
         List<Lotto> allLotto = lottoRepository.findAll();
 
         for(int i = 0 ; i < allLotto.size() ; i++) {
@@ -149,13 +152,13 @@ public class LottoService {
             }
             else if(cnt == 1 && lottoNumber.contains(round.getBonus())) {
                 secondRank++;
-                System.out.println("2등 : " + lottoNumber);
-                System.out.println(i);
+//                System.out.println("2등 : " + lottoNumber);
+//                System.out.println(i);
             }
             else if(cnt == 2){
                 thirdRank++;
-                System.out.println("3등 : " + lottoNumber);
-                System.out.println(i);
+//                System.out.println("3등 : " + lottoNumber);
+//                System.out.println(i + " ");
             }
 
 

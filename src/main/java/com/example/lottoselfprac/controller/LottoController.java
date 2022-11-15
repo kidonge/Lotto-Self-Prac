@@ -7,14 +7,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
-@RestController
 @RequestMapping("/api")
+@RestController
 public class LottoController {
 
     private final LottoService lottoService;
 
-    @PostMapping(value = "/lotto/{count}")
-    public void createLotto(@PathVariable Long count){
+    @PostMapping(value = "/lotto/{count}")  ///{round}
+    public void createLotto(@PathVariable Long count) { //@PathVariable Long round)
        lottoService.createLotto(count);
     }
 

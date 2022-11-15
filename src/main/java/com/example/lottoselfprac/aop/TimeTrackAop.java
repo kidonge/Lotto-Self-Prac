@@ -15,7 +15,7 @@ import org.springframework.util.StopWatch;
 public class TimeTrackAop {
 
     // 조인포인트를 어노테이션으로 설정
-    @Pointcut("@annotation(com.example.lottoprac.aop.ExecutionTime)")
+    @Pointcut("@annotation(com.example.lottoselfprac.aop.ExecutionTime)")
     private void timer(){};
 
     // 메서드 실행 전,후로 시간을 공유해야 하기 때문
