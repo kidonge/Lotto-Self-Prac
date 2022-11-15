@@ -17,7 +17,7 @@ import javax.persistence.*;
 public class Lotto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long lotto_id;
 
     @Column(nullable = false, unique = true)
     private String uniqueCode;
@@ -40,8 +40,8 @@ public class Lotto {
     @Column(nullable = false)
     private Long sixthNum;
 
-    @Column(nullable = false)
-    private Long round;
+//    @Column(nullable = false)
+//    private Long round;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name="store_id")

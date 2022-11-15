@@ -7,16 +7,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
-@RestController
 @RequestMapping("/api")
+@RestController
 public class LottoController {
 
     private final LottoService lottoService;
 
-    @PostMapping(value = "/lotto/{count}/{round}")
-    public void createLotto(@PathVariable Long count,
-                            @PathVariable Long round){
-       lottoService.createLotto(count, round);
+    @PostMapping(value = "/lotto/{count}")  ///{round}
+    public void createLotto(@PathVariable Long count) { //@PathVariable Long round)
+       lottoService.createLotto(count);
     }
 
     // n회차에 정보를 집어넣엇을 때 lotto 테이블에서 1등이 몇 명, 2등이 몇 명인지

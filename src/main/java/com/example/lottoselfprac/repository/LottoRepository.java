@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface LottoRepository extends JpaRepository<Lotto, Long> {
     //List<Lotto> findAllByRound(Long round);
-    List<Lotto> findAllByRound(Long round);
+    //List<Lotto> findAllByRound(Long round);
 }
