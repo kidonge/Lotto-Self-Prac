@@ -29,7 +29,9 @@ public class Store {
     @OneToMany(mappedBy = "store",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
-    private List<Lotto> lotto = new ArrayList<>();
+    private List<Lotto> lottos = new ArrayList<>();
+
+
 
 
 

@@ -40,16 +40,10 @@ public class Lotto {
     @Column(nullable = false)
     private Long sixthNum;
 
-//    @Column(nullable = false)
-//    private Long round;
-
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name="store_id")
     private Store store;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name="round_id")
-//    private Round round;
 
-    
+
 }
