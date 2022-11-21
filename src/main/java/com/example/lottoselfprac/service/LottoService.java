@@ -8,7 +8,7 @@ import com.example.lottoselfprac.reponse.LottoResponseDto;
 import com.example.lottoselfprac.reponse.RankResponseDto;
 import com.example.lottoselfprac.reponse.ResponseDto;
 import com.example.lottoselfprac.repository.LottoRepository;
-import com.example.lottoselfprac.repository.RoundRepository;
+import com.example.lottoselfprac.repository.roundRepository.RoundRepository;
 import com.example.lottoselfprac.repository.storeRepository.StoreRepository;
 import com.example.lottoselfprac.request.LottoDto;
 import lombok.Getter;
@@ -173,9 +173,10 @@ public class LottoService {
     }
 
     //로또 당첨 확인
-    @org.springframework.transaction.annotation.Transactional
+    @Transactional
     public ResponseDto<?> lottoWins(Long num) {
-        Round round = roundRepository.findById(num).orElseThrow();
+        //Round round = roundRepository.findById(num).orElseThrow();
+        Round round = roundRepository.findByRoundId(num).orElseThrow();
         //라운드 로또  추첨 번호
         List<Long> rounds = new ArrayList<>();
         rounds.add(round.getNum1());
