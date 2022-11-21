@@ -1,7 +1,6 @@
 package com.example.lottoselfprac.service;
 
 
-import com.example.lottoselfprac.aop.ExecutionTime;
 import com.example.lottoselfprac.domain.Lotto;
 import com.example.lottoselfprac.domain.Round;
 import com.example.lottoselfprac.domain.Store;
@@ -10,7 +9,7 @@ import com.example.lottoselfprac.reponse.RankResponseDto;
 import com.example.lottoselfprac.reponse.ResponseDto;
 import com.example.lottoselfprac.repository.LottoRepository;
 import com.example.lottoselfprac.repository.RoundRepository;
-import com.example.lottoselfprac.repository.StoreRepository;
+import com.example.lottoselfprac.repository.storeRepository.StoreRepository;
 import com.example.lottoselfprac.request.LottoDto;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +36,8 @@ public class LottoService {
     public ResponseDto<?> lottoCreates(Long nums) {
 
         // 전체 로또 판매점 가져오기
-        List<Store> stores =storeRepository.findAll();
+        //List<Store> stores =storeRepository.findAll();
+        List<Store> stores = storeRepository.searchAll();
 
         // 로또 한 게임
         List<Integer> lotto;
