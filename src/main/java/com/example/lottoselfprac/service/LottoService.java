@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.*;
 
-@Transactional
+
 @RequiredArgsConstructor
 @Getter
 @Service
@@ -33,7 +33,7 @@ public class LottoService {
     private final HashMap<String, Integer> myMap;
 
     //로또 더미데이터 여러개 자동으로 생성
-    @org.springframework.transaction.annotation.Transactional
+    @Transactional
     public ResponseDto<?> lottoCreates(Long nums) {
 
         // 전체 로또 판매점 가져오기
