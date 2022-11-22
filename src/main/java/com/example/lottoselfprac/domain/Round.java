@@ -3,9 +3,7 @@ package com.example.lottoselfprac.domain;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 @Builder
@@ -15,6 +13,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Round {
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "lottery")
     private Long id;
