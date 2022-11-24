@@ -174,7 +174,7 @@ class LottoRepositoryTest {
 
     // 3. 로또 더미데이터 한건보기
     @Test
-    @Sql("classpath:db/tableInit.sql") // id를 찾는 모든 테스트 앞에 붙여주는게 좋음
+    @Sql("classpath:db/tableInit.sql") // id를 찾는 모든 테스트 앞에 붙여주는게 좋음 -> 실제 서버로 테스트 할 때는 테이블이 날라가니깐 id 검증 하지말고 다른 테스트 방법 생각해보기
     @DisplayName("더미데이터 findById() 테스트")
     public void findByIdTest(){
 
@@ -245,6 +245,61 @@ class LottoRepositoryTest {
 
        //assertFalse는 안에 값이 false면 테스트 통과
         assertFalse(lottoRepository.findById(id).isPresent());
+
+    }
+
+    // 5. 수정 -> 더티체킹을  할 수 없다. -> 이미 DB에 저장되어 있는 id에 save를 하면 update와 같은 역할을 하게된다. 11강
+    @Test
+    @Sql("classpath:db/tableInit.sql")
+    @DisplayName("로또 수정하는 테스트")
+    public void updateTest(){
+        /**
+         * given(데이터 준비)
+         */
+
+        String uniqueCode = "e0affffe-8938-4475-a5b5-ab7f966bf4423";
+        Long firstNum = 1L;
+        Long secondNum = 3L;
+        Long thirdNum = 15L;
+        Long fourthNum = 23L;
+        Long fifthNum = 35L;
+        Long sixthNum = 42L;
+        Store store = Store.builder()
+                .storeName("테스트 스토어")
+                .roadAddress("도로명")
+                .lotAddress("주소")
+                .build();
+
+        Lotto lotto = Lotto.builder()
+                .uniqueCode(uniqueCode)
+                .firstNum(firstNum)
+                .secondNum(secondNum)
+                .thirdNum(thirdNum)
+                .fourthNum(fourthNum)
+                .fifthNum(fifthNum)
+                .sixthNum(sixthNum)
+                .store(store)
+                .build();
+
+
+
+        /**
+         * when(테스트 실행)
+         */
+
+        Lotto lottoPS = lottoRepository.save(lotto);
+
+        /**
+         *  then(검증)
+         */
+
+        assertEquals(firstNum, lottoPS.getFirstNum());
+        assertEquals(secondNum, lottoPS.getSecondNum());
+        assertEquals(thirdNum, lottoPS.getThirdNum());
+        assertEquals(fourthNum, lottoPS.getFourthNum());
+        assertEquals(fifthNum, lottoPS.getFifthNum());
+        assertEquals(sixthNum, lottoPS.getSixthNum());
+        assertEquals(store, lottoPS.getStore());
 
     }
 
