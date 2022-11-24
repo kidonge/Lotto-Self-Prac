@@ -3,25 +3,63 @@ package com.example.lottoselfprac.repository;
 import com.example.lottoselfprac.config.TestConfig;
 import com.example.lottoselfprac.domain.Lotto;
 import com.example.lottoselfprac.domain.Store;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.shadow.com.univocity.parsers.annotations.Replace;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
+// [데이터 준비 + save테스트] (트랜잰션) , [데이터 준비 + findAll()] 트랜잭션 -> 즉 각 테스트 하나하나가 트랜잭션이다.
+
 @DataJpaTest // DB와 관련된 컴포넌트만 메모리에 로딩(컨트롤러와 서비스는 로딩되지 않음) 술러아스 테스트
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import(TestConfig.class) //
 class LottoRepositoryTest {
 
     @Autowired
     private LottoRepository lottoRepository;
 
-    // 1. 더미데이터 등록
+    //@BeforeAll -> 테스트 시작전에 한번 만 실행
+    @BeforeEach // 각 테스트 시작 전에 한번 씩 실행
+    public void saveDummyData(){
+        String uniqueCode = "e0affffe-8938-4475-a5b5-ab7f966bf442tt";
+        Long firstNum = 2L;
+        Long secondNum = 5L;
+        Long thirdNum = 10L;
+        Long fourthNum = 33L;
+        Long fifthNum = 35L;
+        Long sixthNum = 44L;
+        Store store = Store.builder()
+                .storeName("공용 더미")
+                .roadAddress("공용 도로명")
+                .lotAddress("공용 주소")
+                .build();
+
+        Lotto lotto = Lotto.builder()
+                .uniqueCode(uniqueCode)
+                .firstNum(firstNum)
+                .secondNum(secondNum)
+                .thirdNum(thirdNum)
+                .fourthNum(fourthNum)
+                .fifthNum(fifthNum)
+                .sixthNum(sixthNum)
+                .store(store)
+                .build();
+
+        Lotto lottoPS = lottoRepository.save(lotto);
+        System.out.println("================================================================");
+    }
+
+    // 1. 로또 더미데이터 등록
     @Test
     @DisplayName("더미데이터 save() 테스트")
     public void saveTest(){
@@ -30,7 +68,7 @@ class LottoRepositoryTest {
         /**
          * given(데이터 준비)
          */
-        String uniqueCode = "e0affffe-8938-4475-a5b5-ab7f966bf442";
+        String uniqueCode = "e0affffe-8938-4475-a5b5-ab7f966bf4423";
         Long firstNum = 1L;
         Long secondNum = 3L;
         Long thirdNum = 15L;
@@ -43,7 +81,6 @@ class LottoRepositoryTest {
                 .lotAddress("주소")
                 .build();
 
-        // Repository 관련 테스트이니 레포지터리는 실제로 엔티티가 들어온다. 그러니 save 테스트를 할 엔티티 생성
         Lotto lotto = Lotto.builder()
                 .uniqueCode(uniqueCode)
                 .firstNum(firstNum)
@@ -54,7 +91,6 @@ class LottoRepositoryTest {
                 .sixthNum(sixthNum)
                 .store(store)
                 .build();
-
 
         /**
          * when(테스트 실행)
@@ -76,8 +112,110 @@ class LottoRepositoryTest {
         assertEquals(sixthNum, lottoPS.getSixthNum());
         assertEquals(store, lottoPS.getStore());
 
+    } // 트랜잭션 종료하면서 저장된 데이터를 초기화하니 밑에 2번 테스트에서 size를 확인해보면 늘어나지 않은 것을 확인해봀 수 있다.
+    // 트랜잭션을 종료하지 않고 밑에 2번 테스트로 간다면 데이터가 한 개 들어가겠지만 테스트마다 분리시켜주는 것이 좋기 때문에 2번 테스트에서 데이터를 넣어주는 작업 필요
+
+    // 2. 로또 더미데이터 목록보기
+    @Test
+    @DisplayName("더미데이터 findAll() 테스트")
+    public void findAllTest(){
+
+        /**
+         * given(데이터 준비)
+         */
+
+        // 지금 DB에 데이터가 하나도 없는 상태이니 데이터 추가
+        String uniqueCode = "e0affffe-8938-4475-a5b5-ab7f966bf442tt";
+        Long firstNum = 2L;
+        Long secondNum = 5L;
+        Long thirdNum = 10L;
+        Long fourthNum = 33L;
+        Long fifthNum = 35L;
+        Long sixthNum = 44L;
+        Store store = Store.builder()
+                .storeName("공용 더미")
+                .roadAddress("공용 도로명")
+                .lotAddress("공용 주소")
+                .build();
+
+
+
+
+
+        /**
+         * when(테스트 실행)
+         */
+        List<Lotto> lottos = lottoRepository.findAll();
+        System.out.println(lottos.get(0).getFirstNum());
+        System.out.println(lottos.get(0).getSecondNum());
+        System.out.println(lottos.get(0).getThirdNum());
+        System.out.println(lottos.get(0).getFourthNum());
+        System.out.println(lottos.get(0).getFifthNum());
+        System.out.println(lottos.get(0).getSixthNum());
+        System.out.println(lottos.get(0).getUniqueCode());
+        System.out.println(lottos.get(0).getStore());
+        System.out.println("=================================== lottoRepository.findAll()" + lottos.size());
+
+
+        /**
+         *  then(검증)
+         */
+
+        assertEquals(firstNum, lottos.get(0).getFirstNum());
+        assertEquals(secondNum, lottos.get(0).getSecondNum());
+        assertEquals(thirdNum, lottos.get(0).getThirdNum());
+        assertEquals(fourthNum, lottos.get(0).getFourthNum());
+        assertEquals(fifthNum, lottos.get(0).getFifthNum());
+        assertEquals(sixthNum, lottos.get(0).getSixthNum());
+//        assertEquals(store, lottos.get(0).getStore());
     }
 
+    // 3. 로또 더미데이터 한건보기
+    @Test
+    @DisplayName("더미데이터 findById() 테스트")
+    public void findByIdTest(){
+
+        /**
+         * given(데이터 준비)
+         */
+
+        // 지금 DB에 데이터가 하나도 없는 상태이니 데이터 추가
+        String uniqueCode = "e0affffe-8938-4475-a5b5-ab7f966bf442tt";
+        Long firstNum = 2L;
+        Long secondNum = 5L;
+        Long thirdNum = 10L;
+        Long fourthNum = 33L;
+        Long fifthNum = 35L;
+        Long sixthNum = 44L;
+        Store store = Store.builder()
+                .storeName("공용 더미")
+                .roadAddress("공용 도로명")
+                .lotAddress("공용 주소")
+                .build();
+
+
+        /**
+         * when(테스트 실행)
+         */
+
+        List<Lotto> lottos2 = lottoRepository.findAll();
+        System.out.println("===================================" + lottos2.size());
+        System.out.println(lottos2.get(0).getLotto_id());
+        Lotto lottos = lottoRepository.findById(1L).get();
+        System.out.println(lottos.getLotto_id());
+
+        /**
+         *  then(검증)
+         */
+
+        assertEquals(firstNum, lottos.getFirstNum());
+        assertEquals(secondNum, lottos.getSecondNum());
+        assertEquals(thirdNum, lottos.getThirdNum());
+        assertEquals(fourthNum, lottos.getFourthNum());
+        assertEquals(fifthNum, lottos.getFifthNum());
+        assertEquals(sixthNum, lottos.getSixthNum());
+//        assertEquals(store, lottos.getStore());
+    }
 
 }
 
