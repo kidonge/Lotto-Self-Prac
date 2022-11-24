@@ -13,8 +13,10 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -172,6 +174,7 @@ class LottoRepositoryTest {
 
     // 3. 로또 더미데이터 한건보기
     @Test
+    @Sql("classpath:db/tableInit.sql") // id를 찾는 모든 테스트 앞에 붙여주는게 좋음
     @DisplayName("더미데이터 findById() 테스트")
     public void findByIdTest(){
 
@@ -217,9 +220,45 @@ class LottoRepositoryTest {
 //        assertEquals(store, lottos.getStore());
     }
 
+    // 로또 삭제
+    @Test
+    @Sql("classpath:db/tableInit.sql")
+    @DisplayName("삭제 테스트")
+    public void deleteTest(){
+        /**
+         * given(데이터 준비)
+         */
+
+        Long id = 1L;
+
+
+
+        /**
+         * when(테스트 실행)
+         */
+
+        lottoRepository.deleteById(id);
+
+        /**
+         *  then(검증)
+         */
+
+       //assertFalse는 안에 값이 false면 테스트 통과
+        assertFalse(lottoRepository.findById(id).isPresent());
+
+    }
+
 }
 
 /*
 컨트롤러, 서비스, 레포지터리를 전부 다 띄어서 테스트 하는건 통합 테스트
 지금은 레포지토리만 테스트 -> 부분 테스트, 단위 테스트
+ */
+
+/*
+일반적으로 테스트는 순서가 보장되지 않는다. -> @Order를 붙여야지 순서 보장된다.
+
+테스트 메서드가 하나 실행 후 종료되면  데이터가 초기화된다.
+데이터는 초기화 되지만 primary key가 auto increment가 되기때문에 id값은 초기화 되지 않는다.
+
  */
