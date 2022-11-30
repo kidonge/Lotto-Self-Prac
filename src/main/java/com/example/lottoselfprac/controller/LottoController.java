@@ -36,7 +36,7 @@ public class LottoController {
 
     // {num} 회차일 때 더미데이터 중 1등부터 5등까지 각각 몇명인지 반환
     @CrossOrigin
-    @PostMapping("/lottoWins/{num}")
+    @GetMapping("/lottoWins/{num}")
     public ResponseDto<?> lottoWin(@PathVariable Long num){
         return lottoService.lottoWins(num);
     }

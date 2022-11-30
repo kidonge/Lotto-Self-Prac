@@ -201,11 +201,11 @@ class LottoRepositoryTest {
          * when(테스트 실행)
          */
 
-        List<Lotto> lottos2 = lottoRepository.findAll();
-        System.out.println("===================================" + lottos2.size());
-        System.out.println(lottos2.get(0).getLotto_id());
+//        List<Lotto> lottos2 = lottoRepository.findAll();
+//        System.out.println("===================================" + lottos2.size());
+//        System.out.println(lottos2.get(0).getLotto_id());
         Lotto lottos = lottoRepository.findById(1L).get();
-        System.out.println(lottos.getLotto_id());
+//        System.out.println(lottos.getLotto_id());
 
         /**
          *  then(검증)
@@ -217,7 +217,7 @@ class LottoRepositoryTest {
         assertEquals(fourthNum, lottos.getFourthNum());
         assertEquals(fifthNum, lottos.getFifthNum());
         assertEquals(sixthNum, lottos.getSixthNum());
-//        assertEquals(store, lottos.getStore());
+        assertEquals(store.getId(), 1L);
     }
 
     // 로또 삭제

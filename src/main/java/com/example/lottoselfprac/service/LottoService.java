@@ -7,6 +7,8 @@ import com.example.lottoselfprac.domain.Store;
 import com.example.lottoselfprac.reponse.LottoResponseDto;
 import com.example.lottoselfprac.reponse.RankResponseDto;
 import com.example.lottoselfprac.reponse.ResponseDto;
+import com.example.lottoselfprac.repository.JdbcLottoCombinationRepository;
+import com.example.lottoselfprac.repository.JdbcLottoTest;
 import com.example.lottoselfprac.repository.LottoRepository;
 import com.example.lottoselfprac.repository.roundRepository.RoundRepository;
 import com.example.lottoselfprac.repository.storeRepository.StoreRepository;
@@ -31,6 +33,8 @@ public class LottoService {
     private final StoreRepository storeRepository;
     private final RoundRepository roundRepository;
     private final HashMap<String, Integer> myMap;
+    private final JdbcLottoCombinationRepository jdbcLottoCombinationRepository;
+    private final JdbcLottoTest jdbcLottoTest;
 
     //로또 더미데이터 여러개 자동으로 생성
     @Transactional
@@ -42,6 +46,8 @@ public class LottoService {
 
         // 로또 한 게임
         List<Integer> lotto;
+
+        List<Lotto> batchInsertList = new ArrayList<>();
 
         // 여러 개의 로또를 모아놓은 리스트
         List<LottoResponseDto> allLottoList = new ArrayList<>();
@@ -75,7 +81,8 @@ public class LottoService {
                     .store(stores.get((int) (Math.random()*stores.size())))
                     .build();
 
-            lottoRepository.save(game);
+            //lottoRepository.save(game);
+            batchInsertList.add(game);
 
             // 반환할 DTO 작성
             LottoResponseDto lottoResponseDto = LottoResponseDto.builder()
@@ -90,9 +97,11 @@ public class LottoService {
             allLottoList.add(lottoResponseDto);
         }
 
+        jdbcLottoTest.batchInsertLottos(batchInsertList);
 
         // 여러 개의 로또를 모아놓은 allLottoList 반환
-        return ResponseDto.success(allLottoList); // 결과값이 보기 불편하게 나옴
+        //return ResponseDto.success(allLottoList); // 결과값이 보기 불편하게 나옴
+        return ResponseDto.success("success");
 
     }
 
@@ -179,6 +188,9 @@ public class LottoService {
 //        Round round = roundRepository.findById(num).orElseThrow();
         //Round round = roundRepository.findByRoundId(num).orElseThrow();
         RoundDto round = roundRepository.findByRoundId2(num);
+
+        // 6개
+        // 로또 번호
         //라운드 로또  추첨 번호
         List<Long> rounds = new ArrayList<>();
         rounds.add(round.getNum1());
@@ -224,12 +236,14 @@ public class LottoService {
             }
 
 
+            System.out.println(map);
             int cnt = 0;
             for(Long key : map.keySet()) {
                 if(map.get(key) > 0) {
                     cnt++;
                 }
             }
+            System.out.println(cnt);
             if(cnt == 0) {
                 firstRank++;
                 System.out.println(lottoCnt);
@@ -281,4 +295,5 @@ public class LottoService {
 }
 
 // 10, 23, 29, 33 , 37, 40      16
+
 
